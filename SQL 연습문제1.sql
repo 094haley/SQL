@@ -35,16 +35,16 @@ create table `Order` (
 
 #실습1-3
 
-insert into `Customer` values ('c101', '김유신', '010-1234-1001', '김해시 봉황동', now());
-insert into `Customer` values ('c102', '김춘추', '010-1234-1002', '경주시 보문동', now());
-insert into `Customer` values ('c103', '장보고', '010-1234-1003', '완도균 청산면', now());
-insert into `Customer` values ('c104', '강감찬', '010-1234-1004', '서울시 마포구', now());
-insert into `Customer`(`custId`, `name`, `rdate`) values ('c105', '이성계', now());
-insert into `Customer` values ('c106', '정철', '010-1234-1006', '경기도 용인시', now());
-insert into `Customer`(`custId`, `name`, `rdate`) values ('c107', '허준', now());
-insert into `Customer` values ('c108', '이순신', '010-1234-1008', '서울시 영등포구', now());
-insert into `Customer` values ('c109', '송상현', '010-1234-1009', '부산시 동래구', now());
-insert into `Customer` values ('c110', '정약용', '010-1234-1010', '경기도 광주시', now());
+insert into `Customer` values ('c101', '김유신', '010-1234-1001', '김해시 봉황동', '2022-01-01');
+insert into `Customer` values ('c102', '김춘추', '010-1234-1002', '경주시 보문동', '2022-01-02');
+insert into `Customer` values ('c103', '장보고', '010-1234-1003', '완도균 청산면', '2022-01-03');
+insert into `Customer` values ('c104', '강감찬', '010-1234-1004', '서울시 마포구', '2022-01-04');
+insert into `Customer`(`custId`, `name`, `rdate`) values ('c105', '이성계', '2022-01-05');
+insert into `Customer` values ('c106', '정철', '010-1234-1006', '경기도 용인시', '2022-01-06');
+insert into `Customer`(`custId`, `name`, `rdate`) values ('c107', '허준', '2022-01-07');
+insert into `Customer` values ('c108', '이순신', '010-1234-1008', '서울시 영등포구', '2022-01-08');
+insert into `Customer` values ('c109', '송상현', '010-1234-1009', '부산시 동래구', '2022-01-09');
+insert into `Customer` values ('c110', '정약용', '010-1234-1010', '경기도 광주시', '2022-01-10');
 
 
 insert into `Product` (`prodName`, `stock`, `price`, `company`) values ('새우깡', 5000, 1500, '농심');
@@ -56,16 +56,16 @@ insert into `Product` (`prodName`, `stock`, `price`, `company`) values ('마가�
 insert into `Product` (`prodName`, `stock`, `price`, `company`) values ('뿌셔뿌셔', 1650, 1200, '오뚜기');
 
 
-insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c102', 3, 2, now());
-insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c101', 4, 1, now());
-insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c108', 1, 1, now());
-insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c109', 6, 5, now());
-insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c102', 2, 1, now());
-insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c101', 7, 3, now());
-insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c110', 1, 2, now());
-insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c104', 2, 4, now());
-insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c102', 1, 3, now());
-insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c107', 6, 1, now());
+insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c102', 3, 2, '2022-07-01 13:15:10');
+insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c101', 4, 1, '2022-07-01 14:16:11');
+insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c108', 1, 1, '2022-07-01 17:23:18');
+insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c109', 6, 5, '2022-07-02 10:46:36');
+insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c102', 2, 1, '2022-07-03 09:15:37');
+insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c101', 7, 3, '2022-07-03 12:35:12');
+insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c110', 1, 2, '2022-07-03 16:55:36');
+insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c104', 2, 4, '2022-07-04 14:23:23');
+insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c102', 1, 3, '2022-07-04 21:54;34');
+insert into `Order` (`orderId`, `orderProduct`, `orderCount`, `orderDate`) values ('c107', 6, 1, '2022-07-05 14:21:03');
 
 
 #실습1-4
@@ -117,7 +117,7 @@ select * from `Customer` where `addr` is not null;
 select * from `Customer` order by `rdate` desc;
 
 #실습1-20
-select * from `Order` where `orderCount` >= 3 order by `orderCount` desc, `orderNo` asc;
+select * from `Order` where `orderCount` >= 3 order by `orderCount` desc, `orderProduct` asc;
 
 #실습1-21
 select AVG(`price`) as `AVG(price)` from `Product`;
@@ -129,7 +129,7 @@ select SUM(`stock`) as `재고량 합계` from `Product` where `company` = '농�
 select count(`custId`) as `고객수` from `Customer`;
 
 #실습1-24
-select count(distinct `company`) as `제조업체 수 ` from `Product`;
+select count(distinct `company`) as `제조업체 수` from `Product`;
 
 #실습1-25
 select `orderProduct` as `주문 상품번호`, sum(`orderCount`) as `총 주문수량` from `Order` group by `orderProduct` order by `orderProduct`;
@@ -147,11 +147,12 @@ select  `orderProduct`, `orderId`, sum(`orderCount`) as `총 주문수량` from 
 select a.`orderId`, b.`prodName`
 from `Order` as a 
 join `Product` as b 
-on `orderProduct` = `prodNo` 
+on a.orderProduct = b.prodNo 
 where `orderId` = 'c102';
 
 #실습1-30
 select `orderId`, `name`, `prodname`, `orderdate`
 from `Order` as a 
 join `Customer` as b on a.`orderId` = b.`custId`
-join `Product` as c on a.`orderProduct` = c.`prodNo`;
+join `Product` as c on a.`orderProduct` = c.`prodNo`
+where substr(`orderDate`, 1, 10) = '2022-07-03';
