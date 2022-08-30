@@ -50,11 +50,11 @@ insert into `bank_account` values('101-11-1003', 'S1', '자유저축예금', '87
 insert into `bank_account` values('101-11-2001', 'S1', '자유저축예금', '220-82-52237', '23000000', '2003-04-14');
 insert into `bank_account` values('101-11-2002', 'S1', '자유저축예금', '361-22-42687', '4201000', '2008-12-30');
 insert into `bank_account` values('101-11-2003', 'S1', '자유저축예금', '102-22-51094', '8325010', '2010-06-07');
-insert into `bank_account` values('101-12-1002', 'S2', '정기적립예금', '830513-200003', '1020000', '2011-05-13');
-insert into `bank_account` values('101-13-1005', 'S3', '주택청약예금', '941127-100006', '720800', '2012-10-15');
-insert into `bank_account` values('101-21-1004', 'L1', '고객신용대출', '910912-100005', '1200500', '2009-08-25');
-insert into `bank_account` values('101-22-1006', 'L2', '예금담보대출', '730423-100001', '25000', '2013-12-11');
-insert into `bank_account` values('101-23-1007', 'L3', '주택담보대출', '750210-100002', '2700000', '2020-09-23');
+insert into `bank_account` values('101-12-1002', 'S2', '정기적립예금', '830513-2000003', '1020000', '2011-05-13');
+insert into `bank_account` values('101-13-1005', 'S3', '주택청약예금', '941127-1000006', '720800', '2012-10-15');
+insert into `bank_account` values('101-21-1004', 'L1', '고객신용대출', '910912-2000005', '1200500', '2009-08-25');
+insert into `bank_account` values('101-22-1006', 'L2', '예금담보대출', '730423-1000001', '25000', '2013-12-11');
+insert into `bank_account` values('101-23-1007', 'L3', '주택담보대출', '750210-1000002', '2700000', '2020-09-23');
 
 insert into `bank_transaction`(`t_a_no`, `t_dist`, `t_amount`, `t_datetime`) values('101-11-1001', 1, 50000, '2022-08-21 04:26:52');
 insert into `bank_transaction`(`t_a_no`, `t_dist`, `t_amount`, `t_datetime`) values('101-11-1003', 2, 120000, '2022-08-21 04:26:52');
@@ -157,17 +157,71 @@ select
     `t_dist`,
     sum(`t_amount`) as `합계`
 from `bank_transaction`
-where `t_dist` = 1 and `t_amount` >= 100000
+where `t_dist` = 1
 group by `t_a_no`
+having `합계` >=100000
 order by `합계` desc;
 
 #실습2-25
-
+select * from `bank_account` as a
+inner join `bank_customer` as b
+on a.`a_c_no` = b.`c_no`;
 
 #실습2-26
-
+select 
+		`a_no` as `계좌번호`,
+        `a_item_name` as `계좌이름`,
+        `c_no` as `주민번호(사업자번호)`,
+        `c_name` as `고객명`,
+        `a_balance` as `현재잔액`
+from `bank_account` as a
+join `bank_customer` as b
+on a.a_c_no = b.c_no;
 
 #실습2-27
+select * from `bank_transaction` as a
+join `bank_account` as b
+on a.t_a_no = b.a_no;
+
 #실습2-28
+select 
+	`t_no` as `거래번호`,
+    `t_a_no` as `계좌번호`,
+    `a_c_no` as `고객번호(주민번호)`,
+    `t_dist` as `거래구분`,
+    `t_amount` as `거래금액`,
+    `t_datetime` as `거래일자`
+from `bank_account` as a
+join `bank_transaction` as b
+on a_no = t_a_no;
+
 #실습2-29
+select 
+	`t_no`,
+    `a_no`,
+    `c_no`,
+    `t_dist`,
+    `a_item_name`,
+    `c_name`,
+    `t_amount`,
+    `t_datetime`
+from `bank_transaction` as a
+join `bank_account` as b on a.t_a_no = b.a_no
+join `bank_customer` as c on b.a_c_no = c_no
+where `t_dist` = 1 
+order by `t_amount` desc;
+
 #실습2-30
+select 
+	`t_no`, 
+    `a_no`, 
+    `c_no`, 
+    `t_dist`, 
+    `a_item_name`, 
+    `c_name`, count(`t_no`) as `거래건수`
+from `bank_transaction` as a
+join `bank_account` as b on a.t_a_no = b.a_no
+join `bank_customer` as c on b.a_c_no = c_no
+where `t_dist` in (1, 2) and `c_dist` = 1
+group by a_no
+order by `t_dist`, `거래건수` desc;
