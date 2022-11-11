@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- 호스트:                          127.0.0.1
--- 서버 버전:                        8.0.30 - MySQL Community Server - GPL
--- 서버 OS:                        Win64
+-- 호스트:                          192.168.56.101
+-- 서버 버전:                        5.5.68-MariaDB - MariaDB Server
+-- 서버 OS:                        Linux
 -- HeidiSQL 버전:                  12.1.0.6537
 -- --------------------------------------------------------
 
@@ -16,7 +16,7 @@
 
 
 -- java2_bank 데이터베이스 구조 내보내기
-CREATE DATABASE IF NOT EXISTS `java2_bank` /*!40100 DEFAULT CHARACTER SET utf8mb4*/ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `java2_bank` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 USE `java2_bank`;
 
 -- 테이블 java2_bank.bank_account 구조 내보내기
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `bank_account` (
   `a_item_dist` char(2) NOT NULL,
   `a_item_name` varchar(20) NOT NULL,
   `a_c_no` char(14) NOT NULL,
-  `a_balance` int NOT NULL DEFAULT '0',
+  `a_balance` int(11) NOT NULL DEFAULT '0',
   `a_open_date` date NOT NULL,
   PRIMARY KEY (`a_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -47,7 +47,7 @@ INSERT INTO `bank_account` (`a_no`, `a_item_dist`, `a_item_name`, `a_c_no`, `a_b
 CREATE TABLE IF NOT EXISTS `bank_customer` (
   `c_no` varchar(14) NOT NULL,
   `c_name` varchar(20) NOT NULL,
-  `c_dist` tinyint NOT NULL DEFAULT '0',
+  `c_dist` tinyint(4) NOT NULL DEFAULT '0',
   `c_phone` varchar(20) NOT NULL,
   `c_addr` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`c_no`),
@@ -68,10 +68,10 @@ INSERT INTO `bank_customer` (`c_no`, `c_name`, `c_dist`, `c_phone`, `c_addr`) VA
 
 -- 테이블 java2_bank.bank_transaction 구조 내보내기
 CREATE TABLE IF NOT EXISTS `bank_transaction` (
-  `t_no` int NOT NULL AUTO_INCREMENT,
+  `t_no` int(11) NOT NULL AUTO_INCREMENT,
   `t_a_no` char(11) NOT NULL,
-  `t_dist` tinyint NOT NULL,
-  `t_amount` int NOT NULL DEFAULT '0',
+  `t_dist` tinyint(4) NOT NULL,
+  `t_amount` int(11) NOT NULL DEFAULT '0',
   `t_datetime` datetime NOT NULL,
   PRIMARY KEY (`t_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
@@ -91,7 +91,7 @@ INSERT INTO `bank_transaction` (`t_no`, `t_a_no`, `t_dist`, `t_amount`, `t_datet
 
 
 -- java2_banking_db 데이터베이스 구조 내보내기
-CREATE DATABASE IF NOT EXISTS `java2_banking_db` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `java2_banking_db` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `java2_banking_db`;
 
 -- 테이블 java2_banking_db.accounts 구조 내보내기
@@ -99,14 +99,14 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `acc_id` varchar(11) NOT NULL,
   `cust_jumin` varchar(20) NOT NULL,
   `acc_type` varchar(20) NOT NULL,
-  `acc_balance` int NOT NULL,
+  `acc_balance` int(11) NOT NULL,
   `card_ask` varchar(5) NOT NULL,
   `acc_register_date` date DEFAULT NULL,
   `acc_cust_name` varchar(20) NOT NULL,
   PRIMARY KEY (`acc_id`),
   KEY `fk_table1_CUSTOMER_idx` (`cust_jumin`),
   CONSTRAINT `fk_table1_CUSTOMER` FOREIGN KEY (`cust_jumin`) REFERENCES `customer` (`cust_jumin`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_banking_db.accounts:~10 rows (대략적) 내보내기
 INSERT INTO `accounts` (`acc_id`, `cust_jumin`, `acc_type`, `acc_balance`, `card_ask`, `acc_register_date`, `acc_cust_name`) VALUES
@@ -123,17 +123,17 @@ INSERT INTO `accounts` (`acc_id`, `cust_jumin`, `acc_type`, `acc_balance`, `card
 
 -- 테이블 java2_banking_db.acc_trades 구조 내보내기
 CREATE TABLE IF NOT EXISTS `acc_trades` (
-  `trade_id` int NOT NULL AUTO_INCREMENT,
+  `trade_id` int(11) NOT NULL AUTO_INCREMENT,
   `acc_id` varchar(11) NOT NULL,
   `acc_class` varchar(20) DEFAULT NULL,
   `acc_contents` varchar(50) DEFAULT NULL,
-  `trade_money` int DEFAULT NULL,
-  `acc_balance` int NOT NULL,
+  `trade_money` int(11) DEFAULT NULL,
+  `acc_balance` int(11) NOT NULL,
   `imp_exp_date` datetime NOT NULL,
   PRIMARY KEY (`trade_id`,`acc_id`),
   KEY `fk_ACC_TRADES_ACCOUNTS1_idx` (`acc_id`),
   CONSTRAINT `fk_ACC_TRADES_ACCOUNTS1` FOREIGN KEY (`acc_id`) REFERENCES `accounts` (`acc_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_banking_db.acc_trades:~10 rows (대략적) 내보내기
 INSERT INTO `acc_trades` (`trade_id`, `acc_id`, `acc_class`, `acc_contents`, `trade_money`, `acc_balance`, `imp_exp_date`) VALUES
@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `cards` (
   `cust_jumin` varchar(20) NOT NULL,
   `acc_id` varchar(11) NOT NULL,
   `card_register_date` date DEFAULT NULL,
-  `card_limit_money` int DEFAULT NULL,
+  `card_limit_money` int(11) DEFAULT NULL,
   `card_approve_date` date DEFAULT NULL,
   `card_type` varchar(10) NOT NULL,
   PRIMARY KEY (`card_id`),
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `cards` (
   KEY `fk_CARDS_ACCOUNTS1_idx` (`acc_id`),
   CONSTRAINT `fk_CARDS_ACCOUNTS1` FOREIGN KEY (`acc_id`) REFERENCES `accounts` (`acc_id`),
   CONSTRAINT `fk_CARDS_CUSTOMER1` FOREIGN KEY (`cust_jumin`) REFERENCES `customer` (`cust_jumin`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_banking_db.cards:~10 rows (대략적) 내보내기
 INSERT INTO `cards` (`card_id`, `cust_jumin`, `acc_id`, `card_register_date`, `card_limit_money`, `card_approve_date`, `card_type`) VALUES
@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `cust_job` varchar(30) NOT NULL,
   PRIMARY KEY (`cust_jumin`),
   UNIQUE KEY `cust_email_UNIQUE` (`cust_email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_banking_db.customer:~12 rows (대략적) 내보내기
 INSERT INTO `customer` (`cust_jumin`, `cust_name`, `cust_addr`, `cust_birth`, `cust_email`, `cust_phnum`, `cust_job`) VALUES
@@ -207,19 +207,19 @@ INSERT INTO `customer` (`cust_jumin`, `cust_name`, `cust_addr`, `cust_birth`, `c
 
 
 -- java2_board 데이터베이스 구조 내보내기
-CREATE DATABASE IF NOT EXISTS `java2_board` /*!40100 DEFAULT CHARACTER SET utf8mb4*/ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `java2_board` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 USE `java2_board`;
 
 -- 테이블 java2_board.board_article 구조 내보내기
 CREATE TABLE IF NOT EXISTS `board_article` (
-  `no` int NOT NULL AUTO_INCREMENT,
-  `parent` int DEFAULT '0',
-  `comment` int DEFAULT '0',
+  `no` int(11) NOT NULL AUTO_INCREMENT,
+  `parent` int(11) DEFAULT '0',
+  `comment` int(11) DEFAULT '0',
   `cate` varchar(20) DEFAULT 'free',
   `title` varchar(255) DEFAULT NULL,
   `content` text NOT NULL,
-  `file` tinyint DEFAULT '0',
-  `hit` int DEFAULT '0',
+  `file` tinyint(4) DEFAULT '0',
+  `hit` int(11) DEFAULT '0',
   `uid` varchar(20) NOT NULL,
   `regip` varchar(100) NOT NULL,
   `rdate` datetime NOT NULL,
@@ -259,11 +259,11 @@ INSERT INTO `board_article` (`no`, `parent`, `comment`, `cate`, `title`, `conten
 
 -- 테이블 java2_board.board_file 구조 내보내기
 CREATE TABLE IF NOT EXISTS `board_file` (
-  `fno` int NOT NULL AUTO_INCREMENT,
-  `parent` int NOT NULL,
+  `fno` int(11) NOT NULL AUTO_INCREMENT,
+  `parent` int(11) NOT NULL,
   `newName` varchar(255) NOT NULL,
   `oriName` varchar(255) NOT NULL,
-  `download` int DEFAULT '0',
+  `download` int(11) DEFAULT '0',
   PRIMARY KEY (`fno`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
@@ -291,9 +291,9 @@ CREATE TABLE IF NOT EXISTS `board_user` (
   `pass` varchar(255) NOT NULL,
   `name` varchar(20) NOT NULL,
   `nick` varchar(20) NOT NULL,
-  `email` varchar(100) CHARACTER SET utf8mb4NOT NULL,
+  `email` varchar(100) NOT NULL,
   `hp` char(13) NOT NULL,
-  `grade` tinyint DEFAULT '2',
+  `grade` tinyint(4) DEFAULT '2',
   `zip` char(5) DEFAULT NULL,
   `addr1` varchar(255) DEFAULT NULL,
   `addr2` varchar(255) DEFAULT NULL,
@@ -315,15 +315,15 @@ INSERT INTO `board_user` (`uid`, `pass`, `name`, `nick`, `email`, `hp`, `grade`,
 
 
 -- java2_bookstore 데이터베이스 구조 내보내기
-CREATE DATABASE IF NOT EXISTS `java2_bookstore` /*!40100 DEFAULT CHARACTER SET utf8mb4*/ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `java2_bookstore` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 USE `java2_bookstore`;
 
 -- 테이블 java2_bookstore.book 구조 내보내기
 CREATE TABLE IF NOT EXISTS `book` (
-  `bookId` int NOT NULL,
+  `bookId` int(11) NOT NULL,
   `bookName` varchar(20) NOT NULL,
   `publisher` varchar(20) NOT NULL,
-  `price` int DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
   PRIMARY KEY (`bookId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -341,7 +341,7 @@ INSERT INTO `book` (`bookId`, `bookName`, `publisher`, `price`) VALUES
 
 -- 테이블 java2_bookstore.customer 구조 내보내기
 CREATE TABLE IF NOT EXISTS `customer` (
-  `custId` int NOT NULL AUTO_INCREMENT,
+  `custId` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(10) NOT NULL,
   `address` varchar(20) NOT NULL,
   `phone` char(13) DEFAULT NULL,
@@ -358,10 +358,10 @@ INSERT INTO `customer` (`custId`, `name`, `address`, `phone`) VALUES
 
 -- 테이블 java2_bookstore.order 구조 내보내기
 CREATE TABLE IF NOT EXISTS `order` (
-  `orderId` int NOT NULL AUTO_INCREMENT,
-  `custId` int NOT NULL,
-  `bookId` int NOT NULL,
-  `salePrice` int NOT NULL,
+  `orderId` int(11) NOT NULL AUTO_INCREMENT,
+  `custId` int(11) NOT NULL,
+  `bookId` int(11) NOT NULL,
+  `salePrice` int(11) NOT NULL,
   `orderDate` date NOT NULL,
   PRIMARY KEY (`orderId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
@@ -381,15 +381,15 @@ INSERT INTO `order` (`orderId`, `custId`, `bookId`, `salePrice`, `orderDate`) VA
 
 
 -- java2_college 데이터베이스 구조 내보내기
-CREATE DATABASE IF NOT EXISTS `java2_college` /*!40100 DEFAULT CHARACTER SET utf8mb4*/ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `java2_college` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 USE `java2_college`;
 
 -- 테이블 java2_college.lecture 구조 내보내기
 CREATE TABLE IF NOT EXISTS `lecture` (
-  `lecNo` int NOT NULL,
+  `lecNo` int(11) NOT NULL,
   `lecName` varchar(20) NOT NULL,
-  `lecCredit` tinyint NOT NULL,
-  `lecTime` int NOT NULL,
+  `lecCredit` tinyint(4) NOT NULL,
+  `lecTime` int(11) NOT NULL,
   `lecClass` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`lecNo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -409,9 +409,9 @@ INSERT INTO `lecture` (`lecNo`, `lecName`, `lecCredit`, `lecTime`, `lecClass`) V
 CREATE TABLE IF NOT EXISTS `register` (
   `regStdNo` char(8) NOT NULL,
   `regLecNo` decimal(5,0) NOT NULL,
-  `regMidScore` tinyint DEFAULT NULL,
-  `regFinalScore` tinyint DEFAULT NULL,
-  `regTotalScore` tinyint DEFAULT NULL,
+  `regMidScore` tinyint(4) DEFAULT NULL,
+  `regFinalScore` tinyint(4) DEFAULT NULL,
+  `regTotalScore` tinyint(4) DEFAULT NULL,
   `regGrade` char(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -431,7 +431,7 @@ CREATE TABLE IF NOT EXISTS `student` (
   `stdNo` char(8) NOT NULL,
   `stdName` varchar(20) NOT NULL,
   `stdHp` char(13) NOT NULL,
-  `stdYear` tinyint NOT NULL,
+  `stdYear` tinyint(4) NOT NULL,
   `stdAddress` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`stdNo`),
   UNIQUE KEY `stdHp` (`stdHp`)
@@ -448,20 +448,20 @@ INSERT INTO `student` (`stdNo`, `stdName`, `stdHp`, `stdYear`, `stdAddress`) VAL
 
 
 -- java2_hospital 데이터베이스 구조 내보내기
-CREATE DATABASE IF NOT EXISTS `java2_hospital` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `java2_hospital` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `java2_hospital`;
 
 -- 테이블 java2_hospital.charts 구조 내보내기
 CREATE TABLE IF NOT EXISTS `charts` (
   `chart_id` char(8) NOT NULL,
-  `treat_no` int NOT NULL,
+  `treat_no` int(11) NOT NULL,
   `doc_id` char(7) NOT NULL,
   `pat_id` char(7) NOT NULL,
   `chart_contents` varchar(255) NOT NULL,
   PRIMARY KEY (`chart_id`,`treat_no`,`doc_id`,`pat_id`),
   KEY `fk_Charts_Treatments1_idx` (`treat_no`,`doc_id`,`pat_id`),
   CONSTRAINT `fk_Charts_Treatments1` FOREIGN KEY (`treat_no`, `doc_id`, `pat_id`) REFERENCES `treatments` (`treat_no`, `doc_id`, `pat_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_hospital.charts:~12 rows (대략적) 내보내기
 INSERT INTO `charts` (`chart_id`, `treat_no`, `doc_id`, `pat_id`, `chart_contents`) VALUES
@@ -485,7 +485,7 @@ CREATE TABLE IF NOT EXISTS `departments` (
   `dep_manager` varchar(20) NOT NULL,
   `dep_tel` varchar(20) NOT NULL,
   PRIMARY KEY (`dep_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_hospital.departments:~12 rows (대략적) 내보내기
 INSERT INTO `departments` (`dep_no`, `dep_name`, `dep_manager`, `dep_tel`) VALUES
@@ -517,7 +517,7 @@ CREATE TABLE IF NOT EXISTS `doctors` (
   UNIQUE KEY `doc_email_UNIQUE` (`doc_email`),
   KEY `fk_Doctors_Departments1_idx` (`dep_no`),
   CONSTRAINT `fk_Doctors_Departments1` FOREIGN KEY (`dep_no`) REFERENCES `departments` (`dep_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_hospital.doctors:~12 rows (대략적) 내보내기
 INSERT INTO `doctors` (`doc_id`, `doc_name`, `doc_birth`, `doc_gen`, `dep_no`, `doc_pos`, `doc_phone`, `doc_email`) VALUES
@@ -548,7 +548,7 @@ CREATE TABLE IF NOT EXISTS `nurses` (
   UNIQUE KEY `nur_email_UNIQUE` (`nur_email`),
   KEY `fk_Nurses_Departments1_idx` (`dep_no`),
   CONSTRAINT `fk_Nurses_Departments1` FOREIGN KEY (`dep_no`) REFERENCES `departments` (`dep_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_hospital.nurses:~10 rows (대략적) 내보내기
 INSERT INTO `nurses` (`nur_id`, `nur_name`, `nur_birth`, `nur_gender`, `dep_no`, `nur_pos`, `nur_phone`, `nur_email`) VALUES
@@ -583,7 +583,7 @@ CREATE TABLE IF NOT EXISTS `patients` (
   KEY `fk_Patients_Nurses1_idx` (`nur_id`),
   CONSTRAINT `fk_Patients_Doctors1` FOREIGN KEY (`doc_id`) REFERENCES `doctors` (`doc_id`),
   CONSTRAINT `fk_Patients_Nurses1` FOREIGN KEY (`nur_id`) REFERENCES `nurses` (`nur_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_hospital.patients:~12 rows (대략적) 내보내기
 INSERT INTO `patients` (`pat_id`, `doc_id`, `nur_id`, `pat_name`, `pat_jumin`, `pat_gen`, `pat_addr`, `pat_phone`, `pat_email`, `pat_job`) VALUES
@@ -602,7 +602,7 @@ INSERT INTO `patients` (`pat_id`, `doc_id`, `nur_id`, `pat_name`, `pat_jumin`, `
 
 -- 테이블 java2_hospital.treatments 구조 내보내기
 CREATE TABLE IF NOT EXISTS `treatments` (
-  `treat_no` int NOT NULL,
+  `treat_no` int(11) NOT NULL,
   `doc_id` char(7) NOT NULL,
   `pat_id` char(7) NOT NULL,
   `treat_contents` varchar(255) NOT NULL,
@@ -612,7 +612,7 @@ CREATE TABLE IF NOT EXISTS `treatments` (
   KEY `fk_Treatments_Patients1_idx` (`pat_id`),
   CONSTRAINT `fk_Treatments_Doctors1` FOREIGN KEY (`doc_id`) REFERENCES `doctors` (`doc_id`),
   CONSTRAINT `fk_Treatments_Patients1` FOREIGN KEY (`pat_id`) REFERENCES `patients` (`pat_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_hospital.treatments:~12 rows (대략적) 내보내기
 INSERT INTO `treatments` (`treat_no`, `doc_id`, `pat_id`, `treat_contents`, `treat_datetime`) VALUES
@@ -631,46 +631,46 @@ INSERT INTO `treatments` (`treat_no`, `doc_id`, `pat_id`, `treat_contents`, `tre
 
 
 -- java2_md_bookstore 데이터베이스 구조 내보내기
-CREATE DATABASE IF NOT EXISTS `java2_md_bookstore` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `java2_md_bookstore` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `java2_md_bookstore`;
 
 -- 테이블 java2_md_bookstore.book 구조 내보내기
 CREATE TABLE IF NOT EXISTS `book` (
-  `bookId` int NOT NULL,
+  `bookId` int(11) NOT NULL,
   `bookName` varchar(45) NOT NULL,
-  `price` int NOT NULL,
+  `price` int(11) NOT NULL,
   `pubName` varchar(45) NOT NULL,
   PRIMARY KEY (`bookId`),
   KEY `fk_book_publisher1_idx` (`pubName`),
   CONSTRAINT `fk_book_publisher1` FOREIGN KEY (`pubName`) REFERENCES `publisher` (`publisherName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_md_bookstore.book:~0 rows (대략적) 내보내기
 
 -- 테이블 java2_md_bookstore.customer 구조 내보내기
 CREATE TABLE IF NOT EXISTS `customer` (
-  `custId` int NOT NULL,
+  `custId` int(11) NOT NULL,
   `custName` varchar(45) NOT NULL,
   `custHP` char(13) NOT NULL,
   `custAddr` varchar(45) NOT NULL,
   PRIMARY KEY (`custId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_md_bookstore.customer:~0 rows (대략적) 내보내기
 
 -- 테이블 java2_md_bookstore.order 구조 내보내기
 CREATE TABLE IF NOT EXISTS `order` (
-  `orderID` int NOT NULL,
-  `custId` int NOT NULL,
-  `bookID` int NOT NULL,
-  `orderPrice` int NOT NULL,
+  `orderID` int(11) NOT NULL,
+  `custId` int(11) NOT NULL,
+  `bookID` int(11) NOT NULL,
+  `orderPrice` int(11) NOT NULL,
   `orderDate` datetime NOT NULL,
   PRIMARY KEY (`orderID`,`custId`),
   KEY `fk_order_book_idx` (`bookID`),
   KEY `fk_order_customer1_idx` (`custId`),
   CONSTRAINT `fk_order_book` FOREIGN KEY (`bookID`) REFERENCES `book` (`bookId`),
   CONSTRAINT `fk_order_customer1` FOREIGN KEY (`custId`) REFERENCES `customer` (`custId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_md_bookstore.order:~0 rows (대략적) 내보내기
 
@@ -680,22 +680,22 @@ CREATE TABLE IF NOT EXISTS `publisher` (
   `pubManager` varchar(45) NOT NULL,
   `pubTel` char(13) NOT NULL,
   PRIMARY KEY (`publisherName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_md_bookstore.publisher:~0 rows (대략적) 내보내기
 
 
 -- java2_md_company 데이터베이스 구조 내보내기
-CREATE DATABASE IF NOT EXISTS `java2_md_company` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `java2_md_company` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `java2_md_company`;
 
 -- 테이블 java2_md_company.department 구조 내보내기
 CREATE TABLE IF NOT EXISTS `department` (
-  `depNo` int NOT NULL,
+  `depNo` int(11) NOT NULL,
   `depName` varchar(45) DEFAULT NULL,
   `depTel` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`depNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_md_company.department:~0 rows (대략적) 내보내기
 
@@ -705,30 +705,30 @@ CREATE TABLE IF NOT EXISTS `member` (
   `name` varchar(45) NOT NULL,
   `hp` char(13) NOT NULL,
   `pos` varchar(45) NOT NULL,
-  `dep` int NOT NULL,
+  `dep` int(11) NOT NULL,
   `rdate` datetime NOT NULL,
   PRIMARY KEY (`uid`),
   KEY `fk_Member_Department1_idx` (`dep`),
   CONSTRAINT `fk_Member_Department1` FOREIGN KEY (`dep`) REFERENCES `department` (`depNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_md_company.member:~0 rows (대략적) 내보내기
 
 -- 테이블 java2_md_company.sales 구조 내보내기
 CREATE TABLE IF NOT EXISTS `sales` (
   `uid` varchar(45) NOT NULL,
-  `year` year DEFAULT NULL,
-  `month` tinyint DEFAULT NULL,
-  `sale` int DEFAULT NULL,
+  `year` year(4) DEFAULT NULL,
+  `month` tinyint(4) DEFAULT NULL,
+  `sale` int(11) DEFAULT NULL,
   PRIMARY KEY (`uid`),
   CONSTRAINT `fk_Sales_Member1` FOREIGN KEY (`uid`) REFERENCES `member` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_md_company.sales:~0 rows (대략적) 내보내기
 
 
 -- java2_shop 데이터베이스 구조 내보내기
-CREATE DATABASE IF NOT EXISTS `java2_shop` /*!40100 DEFAULT CHARACTER SET utf8mb4*/ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `java2_shop` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 USE `java2_shop`;
 
 -- 테이블 java2_shop.customer 구조 내보내기
@@ -757,10 +757,10 @@ INSERT INTO `customer` (`custId`, `name`, `hp`, `addr`, `rdate`) VALUES
 
 -- 테이블 java2_shop.order 구조 내보내기
 CREATE TABLE IF NOT EXISTS `order` (
-  `orderNo` int NOT NULL AUTO_INCREMENT,
+  `orderNo` int(11) NOT NULL AUTO_INCREMENT,
   `orderId` varchar(10) NOT NULL,
-  `orderProduct` int NOT NULL,
-  `orderCount` int DEFAULT '1',
+  `orderProduct` int(11) NOT NULL,
+  `orderCount` int(11) DEFAULT '1',
   `orderDate` datetime NOT NULL,
   PRIMARY KEY (`orderNo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
@@ -780,10 +780,10 @@ INSERT INTO `order` (`orderNo`, `orderId`, `orderProduct`, `orderCount`, `orderD
 
 -- 테이블 java2_shop.product 구조 내보내기
 CREATE TABLE IF NOT EXISTS `product` (
-  `prodNO` int NOT NULL AUTO_INCREMENT,
+  `prodNO` int(11) NOT NULL AUTO_INCREMENT,
   `prodName` varchar(10) NOT NULL,
-  `stock` int DEFAULT '0',
-  `price` int DEFAULT NULL,
+  `stock` int(11) DEFAULT '0',
+  `price` int(11) DEFAULT NULL,
   `company` varchar(20) NOT NULL,
   PRIMARY KEY (`prodNO`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
@@ -800,22 +800,22 @@ INSERT INTO `product` (`prodNO`, `prodName`, `stock`, `price`, `company`) VALUES
 
 
 -- java2_shoppingmall 데이터베이스 구조 내보내기
-CREATE DATABASE IF NOT EXISTS `java2_shoppingmall` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `java2_shoppingmall` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `java2_shoppingmall`;
 
 -- 테이블 java2_shoppingmall.carts 구조 내보내기
 CREATE TABLE IF NOT EXISTS `carts` (
-  `cartNo` int NOT NULL AUTO_INCREMENT,
+  `cartNo` int(11) NOT NULL AUTO_INCREMENT,
   `userId` varchar(20) NOT NULL,
-  `prodNo` int NOT NULL,
-  `cartProdCount` int DEFAULT '1',
+  `prodNo` int(11) NOT NULL,
+  `cartProdCount` int(11) DEFAULT '1',
   `cartProdDate` datetime NOT NULL,
   PRIMARY KEY (`cartNo`,`userId`,`prodNo`),
   KEY `fk_Carts_Products1_idx` (`prodNo`),
   KEY `fk_Carts_Users1_idx` (`userId`),
   CONSTRAINT `fk_Carts_Products1` FOREIGN KEY (`prodNo`) REFERENCES `products` (`prodNo`),
   CONSTRAINT `fk_Carts_Users1` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_shoppingmall.carts:~10 rows (대략적) 내보내기
 INSERT INTO `carts` (`cartNo`, `userId`, `prodNo`, `cartProdCount`, `cartProdDate`) VALUES
@@ -832,10 +832,10 @@ INSERT INTO `carts` (`cartNo`, `userId`, `prodNo`, `cartProdCount`, `cartProdDat
 
 -- 테이블 java2_shoppingmall.categories 구조 내보내기
 CREATE TABLE IF NOT EXISTS `categories` (
-  `cateNo` int NOT NULL,
+  `cateNo` int(11) NOT NULL,
   `cateName` varchar(45) NOT NULL,
   PRIMARY KEY (`cateNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_shoppingmall.categories:~10 rows (대략적) 내보내기
 INSERT INTO `categories` (`cateNo`, `cateName`) VALUES
@@ -852,18 +852,18 @@ INSERT INTO `categories` (`cateNo`, `cateName`) VALUES
 
 -- 테이블 java2_shoppingmall.orderitems 구조 내보내기
 CREATE TABLE IF NOT EXISTS `orderitems` (
-  `itemNo` int NOT NULL AUTO_INCREMENT,
+  `itemNo` int(11) NOT NULL AUTO_INCREMENT,
   `orderNo` char(11) NOT NULL,
-  `prodNo` int NOT NULL,
-  `itemPrice` int NOT NULL,
-  `itemDiscount` tinyint NOT NULL,
-  `itemCount` int DEFAULT '1',
+  `prodNo` int(11) NOT NULL,
+  `itemPrice` int(11) NOT NULL,
+  `itemDiscount` tinyint(4) NOT NULL,
+  `itemCount` int(11) DEFAULT '1',
   PRIMARY KEY (`itemNo`,`orderNo`,`prodNo`),
   KEY `fk_table1_Orders1_idx` (`orderNo`),
   KEY `fk_OrderItems_Products1_idx` (`prodNo`),
   CONSTRAINT `fk_OrderItems_Products1` FOREIGN KEY (`prodNo`) REFERENCES `products` (`prodNo`),
   CONSTRAINT `fk_table1_Orders1` FOREIGN KEY (`orderNo`) REFERENCES `orders` (`orderNo`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_shoppingmall.orderitems:~13 rows (대략적) 내보내기
 INSERT INTO `orderitems` (`itemNo`, `orderNo`, `prodNo`, `itemPrice`, `itemDiscount`, `itemCount`) VALUES
@@ -885,14 +885,14 @@ INSERT INTO `orderitems` (`itemNo`, `orderNo`, `prodNo`, `itemPrice`, `itemDisco
 CREATE TABLE IF NOT EXISTS `orders` (
   `orderNo` char(11) NOT NULL,
   `userId` varchar(20) NOT NULL,
-  `orderTotalPrice` int NOT NULL,
+  `orderTotalPrice` int(11) NOT NULL,
   `orderAddr` varchar(255) NOT NULL,
-  `orderStatus` tinyint DEFAULT '0',
+  `orderStatus` tinyint(4) DEFAULT '0',
   `orderDate` datetime NOT NULL,
   PRIMARY KEY (`orderNo`,`userId`),
   KEY `fk_Orders_Users_idx` (`userId`),
   CONSTRAINT `fk_Orders_Users` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_shoppingmall.orders:~10 rows (대략적) 내보내기
 INSERT INTO `orders` (`orderNo`, `userId`, `orderTotalPrice`, `orderAddr`, `orderStatus`, `orderDate`) VALUES
@@ -909,15 +909,15 @@ INSERT INTO `orders` (`orderNo`, `userId`, `orderTotalPrice`, `orderAddr`, `orde
 
 -- 테이블 java2_shoppingmall.points 구조 내보내기
 CREATE TABLE IF NOT EXISTS `points` (
-  `pointNo` int NOT NULL AUTO_INCREMENT,
+  `pointNo` int(11) NOT NULL AUTO_INCREMENT,
   `userId` varchar(20) NOT NULL,
-  `point` int NOT NULL,
+  `point` int(11) NOT NULL,
   `pointDesc` varchar(45) NOT NULL,
   `pointDate` datetime NOT NULL,
   PRIMARY KEY (`pointNo`,`userId`),
   KEY `fk_Points_Users1_idx` (`userId`),
   CONSTRAINT `fk_Points_Users1` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_shoppingmall.points:~10 rows (대략적) 내보내기
 INSERT INTO `points` (`pointNo`, `userId`, `point`, `pointDesc`, `pointDate`) VALUES
@@ -934,20 +934,20 @@ INSERT INTO `points` (`pointNo`, `userId`, `point`, `pointDesc`, `pointDate`) VA
 
 -- 테이블 java2_shoppingmall.products 구조 내보내기
 CREATE TABLE IF NOT EXISTS `products` (
-  `prodNo` int NOT NULL,
-  `cateNo` int NOT NULL,
+  `prodNo` int(11) NOT NULL,
+  `cateNo` int(11) NOT NULL,
   `prodName` varchar(20) NOT NULL,
-  `prodPrice` int NOT NULL,
-  `prodStock` int DEFAULT '0',
-  `prodSold` int DEFAULT '0',
-  `prodDiscount` tinyint DEFAULT '0',
-  `sellerNo` int NOT NULL,
+  `prodPrice` int(11) NOT NULL,
+  `prodStock` int(11) DEFAULT '0',
+  `prodSold` int(11) DEFAULT '0',
+  `prodDiscount` tinyint(4) DEFAULT '0',
+  `sellerNo` int(11) NOT NULL,
   PRIMARY KEY (`prodNo`,`cateNo`),
   KEY `fk_Products_Categories1_idx` (`cateNo`),
   KEY `fk_Products_Sellers1_idx` (`sellerNo`),
   CONSTRAINT `fk_Products_Categories1` FOREIGN KEY (`cateNo`) REFERENCES `categories` (`cateNo`),
   CONSTRAINT `fk_Products_Sellers1` FOREIGN KEY (`sellerNo`) REFERENCES `sellers` (`sellerNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_shoppingmall.products:~10 rows (대략적) 내보내기
 INSERT INTO `products` (`prodNo`, `cateNo`, `prodName`, `prodPrice`, `prodStock`, `prodSold`, `prodDiscount`, `sellerNo`) VALUES
@@ -964,13 +964,13 @@ INSERT INTO `products` (`prodNo`, `cateNo`, `prodName`, `prodPrice`, `prodStock`
 
 -- 테이블 java2_shoppingmall.sellers 구조 내보내기
 CREATE TABLE IF NOT EXISTS `sellers` (
-  `sellerNo` int NOT NULL,
+  `sellerNo` int(11) NOT NULL,
   `sellerBizName` varchar(45) NOT NULL,
   `sellerPhone` varchar(20) NOT NULL,
   `sellerManager` varchar(20) NOT NULL,
   `sellerAddr` varchar(100) NOT NULL,
   PRIMARY KEY (`sellerNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_shoppingmall.sellers:~10 rows (대략적) 내보내기
 INSERT INTO `sellers` (`sellerNo`, `sellerBizName`, `sellerPhone`, `sellerManager`, `sellerAddr`) VALUES
@@ -993,14 +993,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `userGender` char(1) NOT NULL,
   `userHp` char(13) NOT NULL,
   `userEmail` varchar(45) DEFAULT NULL,
-  `userPoint` int DEFAULT '0',
-  `userLevel` tinyint DEFAULT '1',
+  `userPoint` int(11) DEFAULT '0',
+  `userLevel` tinyint(4) DEFAULT '1',
   `userAddr` varchar(100) DEFAULT NULL,
   `userRegDate` datetime DEFAULT NULL,
   PRIMARY KEY (`userId`),
   UNIQUE KEY `userHp_UNIQUE` (`userHp`),
   UNIQUE KEY `userEmail_UNIQUE` (`userEmail`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_shoppingmall.users:~10 rows (대략적) 내보내기
 INSERT INTO `users` (`userId`, `userName`, `userBirth`, `userGender`, `userHp`, `userEmail`, `userPoint`, `userLevel`, `userAddr`, `userRegDate`) VALUES
@@ -1017,16 +1017,16 @@ INSERT INTO `users` (`userId`, `userName`, `userBirth`, `userGender`, `userHp`, 
 
 
 -- java2_university 데이터베이스 구조 내보내기
-CREATE DATABASE IF NOT EXISTS `java2_university` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `java2_university` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `java2_university`;
 
 -- 테이블 java2_university.departments 구조 내보내기
 CREATE TABLE IF NOT EXISTS `departments` (
-  `depNo` int NOT NULL,
+  `depNo` int(11) NOT NULL,
   `depName` varchar(20) NOT NULL,
   `depTel` char(14) NOT NULL,
   PRIMARY KEY (`depNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_university.departments:~12 rows (대략적) 내보내기
 INSERT INTO `departments` (`depNo`, `depName`, `depTel`) VALUES
@@ -1048,13 +1048,13 @@ CREATE TABLE IF NOT EXISTS `lectures` (
   `lecNo` char(6) NOT NULL,
   `proNo` char(6) NOT NULL,
   `lecName` varchar(45) NOT NULL,
-  `lecCredit` tinyint NOT NULL,
-  `lecTime` tinyint NOT NULL,
+  `lecCredit` tinyint(4) NOT NULL,
+  `lecTime` tinyint(4) NOT NULL,
   `lecClass` varchar(45) NOT NULL,
   PRIMARY KEY (`lecNo`,`proNo`),
   KEY `fk_Lectures_Professors1_idx` (`proNo`),
   CONSTRAINT `fk_Lectures_Professors1` FOREIGN KEY (`proNo`) REFERENCES `professors` (`proNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_university.lectures:~10 rows (대략적) 내보내기
 INSERT INTO `lectures` (`lecNo`, `proNo`, `lecName`, `lecCredit`, `lecTime`, `lecClass`) VALUES
@@ -1077,13 +1077,13 @@ CREATE TABLE IF NOT EXISTS `professors` (
   `proHp` char(13) NOT NULL,
   `proEmail` varchar(45) NOT NULL,
   `proAddr` varchar(100) NOT NULL,
-  `depNo` int NOT NULL,
+  `depNo` int(11) NOT NULL,
   PRIMARY KEY (`proNo`),
   UNIQUE KEY `proHp_UNIQUE` (`proHp`),
   UNIQUE KEY `proJumin_UNIQUE` (`proJumin`),
   KEY `fk_Professors_Departments1_idx` (`depNo`),
   CONSTRAINT `fk_Professors_Departments1` FOREIGN KEY (`depNo`) REFERENCES `departments` (`depNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_university.professors:~12 rows (대략적) 내보내기
 INSERT INTO `professors` (`proNo`, `proName`, `proJumin`, `proHp`, `proEmail`, `proAddr`, `depNo`) VALUES
@@ -1105,18 +1105,18 @@ CREATE TABLE IF NOT EXISTS `register` (
   `stdNo` char(8) NOT NULL,
   `lecNo` char(6) NOT NULL,
   `proNo` char(6) NOT NULL,
-  `regAttenScore` tinyint DEFAULT NULL,
-  `regMidScore` tinyint DEFAULT NULL,
-  `regFinalScore` tinyint DEFAULT NULL,
-  `regEtcScore` tinyint DEFAULT NULL,
-  `regTotal` tinyint DEFAULT NULL,
+  `regAttenScore` tinyint(4) DEFAULT NULL,
+  `regMidScore` tinyint(4) DEFAULT NULL,
+  `regFinalScore` tinyint(4) DEFAULT NULL,
+  `regEtcScore` tinyint(4) DEFAULT NULL,
+  `regTotal` tinyint(4) DEFAULT NULL,
   `regGrade` char(1) DEFAULT NULL,
   PRIMARY KEY (`stdNo`,`lecNo`,`proNo`),
   KEY `fk_Register_Students1_idx` (`stdNo`),
   KEY `fk_Register_Lectures1_idx` (`lecNo`,`proNo`),
   CONSTRAINT `fk_Register_Lectures1` FOREIGN KEY (`lecNo`, `proNo`) REFERENCES `lectures` (`lecNo`, `proNo`),
   CONSTRAINT `fk_Register_Students1` FOREIGN KEY (`stdNo`) REFERENCES `students` (`stdNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_university.register:~10 rows (대략적) 내보내기
 INSERT INTO `register` (`stdNo`, `lecNo`, `proNo`, `regAttenScore`, `regMidScore`, `regFinalScore`, `regEtcScore`, `regTotal`, `regGrade`) VALUES
@@ -1140,7 +1140,7 @@ CREATE TABLE IF NOT EXISTS `students` (
   `stdEmail` varchar(45) DEFAULT NULL,
   `stdAddr` varchar(100) NOT NULL,
   `proNo` char(6) NOT NULL,
-  `depNo` int NOT NULL,
+  `depNo` int(11) NOT NULL,
   PRIMARY KEY (`stdNo`),
   UNIQUE KEY `stdHP_UNIQUE` (`stdHP`),
   UNIQUE KEY `stdJumin_UNIQUE` (`stdJumin`),
@@ -1149,7 +1149,7 @@ CREATE TABLE IF NOT EXISTS `students` (
   KEY `fk_Students_Professors1_idx` (`proNo`),
   CONSTRAINT `fk_Students_Departments` FOREIGN KEY (`depNo`) REFERENCES `departments` (`depNo`),
   CONSTRAINT `fk_Students_Professors1` FOREIGN KEY (`proNo`) REFERENCES `professors` (`proNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 테이블 데이터 java2_university.students:~12 rows (대략적) 내보내기
 INSERT INTO `students` (`stdNo`, `stdName`, `stdJumin`, `stdHP`, `stdEmail`, `stdAddr`, `proNo`, `depNo`) VALUES
@@ -1168,7 +1168,7 @@ INSERT INTO `students` (`stdNo`, `stdName`, `stdJumin`, `stdHP`, `stdEmail`, `st
 
 
 -- java2db 데이터베이스 구조 내보내기
-CREATE DATABASE IF NOT EXISTS `java2db` /*!40100 DEFAULT CHARACTER SET utf8mb4*/ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `java2db` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 USE `java2db`;
 
 -- 테이블 java2db.child 구조 내보내기
@@ -1189,7 +1189,7 @@ INSERT INTO `child` (`cid`, `name`, `hp`, `pid`) VALUES
 
 -- 테이블 java2db.department 구조 내보내기
 CREATE TABLE IF NOT EXISTS `department` (
-  `depNo` tinyint NOT NULL,
+  `depNo` tinyint(4) NOT NULL,
   `name` varchar(10) NOT NULL,
   `tel` char(12) NOT NULL,
   PRIMARY KEY (`depNo`)
@@ -1211,7 +1211,7 @@ CREATE TABLE IF NOT EXISTS `member` (
   `name` varchar(10) NOT NULL,
   `hp` char(13) NOT NULL,
   `pos` varchar(10) DEFAULT '사원',
-  `dep` tinyint DEFAULT NULL,
+  `dep` tinyint(4) DEFAULT NULL,
   `rdate` datetime NOT NULL,
   PRIMARY KEY (`uid`),
   UNIQUE KEY `hp` (`hp`)
@@ -1246,11 +1246,11 @@ INSERT INTO `parent` (`pid`, `name`, `hp`) VALUES
 
 -- 테이블 java2db.sales 구조 내보내기
 CREATE TABLE IF NOT EXISTS `sales` (
-  `seq` int NOT NULL AUTO_INCREMENT,
+  `seq` int(11) NOT NULL AUTO_INCREMENT,
   `uid` varchar(10) NOT NULL,
-  `year` year NOT NULL,
-  `month` tinyint NOT NULL,
-  `sale` int NOT NULL,
+  `year` year(4) NOT NULL,
+  `month` tinyint(4) NOT NULL,
+  `sale` int(11) NOT NULL,
   PRIMARY KEY (`seq`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4;
 
@@ -1289,11 +1289,11 @@ INSERT INTO `sales` (`seq`, `uid`, `year`, `month`, `sale`) VALUES
 
 -- 테이블 java2db.sales2 구조 내보내기
 CREATE TABLE IF NOT EXISTS `sales2` (
-  `seq` int NOT NULL AUTO_INCREMENT,
+  `seq` int(11) NOT NULL AUTO_INCREMENT,
   `uid` varchar(10) NOT NULL,
-  `year` year NOT NULL,
-  `month` tinyint NOT NULL,
-  `sale` int NOT NULL,
+  `year` year(4) NOT NULL,
+  `month` tinyint(4) NOT NULL,
+  `sale` int(11) NOT NULL,
   PRIMARY KEY (`seq`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4;
 
@@ -1332,10 +1332,10 @@ INSERT INTO `sales2` (`seq`, `uid`, `year`, `month`, `sale`) VALUES
 
 -- 테이블 java2db.tblproduct 구조 내보내기
 CREATE TABLE IF NOT EXISTS `tblproduct` (
-  `prdCode` int DEFAULT NULL,
+  `prdCode` int(11) DEFAULT NULL,
   `prdName` varchar(10) DEFAULT NULL,
-  `prdPrice` int DEFAULT NULL,
-  `prdAmount` int DEFAULT NULL,
+  `prdPrice` int(11) DEFAULT NULL,
+  `prdAmount` int(11) DEFAULT NULL,
   `prdCompany` varchar(10) DEFAULT NULL,
   `prdMakeDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1354,7 +1354,7 @@ CREATE TABLE IF NOT EXISTS `tbluser` (
   `userId` varchar(10) DEFAULT NULL,
   `userName` varchar(10) DEFAULT NULL,
   `userHP` char(13) DEFAULT NULL,
-  `userAge` tinyint DEFAULT NULL,
+  `userAge` tinyint(4) DEFAULT NULL,
   `userAddr` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1370,23 +1370,24 @@ CREATE TABLE IF NOT EXISTS `user1` (
   `uid` varchar(10) DEFAULT NULL,
   `name` varchar(10) DEFAULT NULL,
   `hp` char(13) DEFAULT NULL,
-  `age` int DEFAULT NULL
+  `age` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 테이블 데이터 java2db.user1:~5 rows (대략적) 내보내기
+-- 테이블 데이터 java2db.user1:~6 rows (대략적) 내보내기
 INSERT INTO `user1` (`uid`, `name`, `hp`, `age`) VALUES
 	('a102', '김춘추', '010-1234-1002', 23),
 	('a103', '장보고', '010-1234-1003', 33),
 	('a104', '강감찬', '010-1234-1004', 43),
 	('a105', '이순신', '010-1234-1005', 53),
-	('a101', '김유신', '010-1234-1001', 25);
+	('a101', '김유신', '010-1234-1001', 25),
+	('a106', '신사임당', '010-1234-1006', 55);
 
 -- 테이블 java2db.user2 구조 내보내기
 CREATE TABLE IF NOT EXISTS `user2` (
   `uid` varchar(20) NOT NULL,
   `name` varchar(10) DEFAULT NULL,
   `hp` char(13) DEFAULT NULL,
-  `age` tinyint DEFAULT NULL,
+  `age` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1403,7 +1404,7 @@ CREATE TABLE IF NOT EXISTS `user3` (
   `uid` varchar(20) NOT NULL,
   `name` varchar(10) DEFAULT NULL,
   `hp` char(13) DEFAULT NULL,
-  `age` tinyint DEFAULT NULL,
+  `age` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`uid`),
   UNIQUE KEY `hp` (`hp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1417,10 +1418,10 @@ INSERT INTO `user3` (`uid`, `name`, `hp`, `age`) VALUES
 
 -- 테이블 java2db.user4 구조 내보내기
 CREATE TABLE IF NOT EXISTS `user4` (
-  `seq` int NOT NULL AUTO_INCREMENT,
+  `seq` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(10) DEFAULT NULL,
-  `gender` tinyint DEFAULT NULL,
-  `age` tinyint DEFAULT NULL,
+  `gender` tinyint(4) DEFAULT NULL,
+  `age` tinyint(4) DEFAULT NULL,
   `addr` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`seq`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
@@ -1435,8 +1436,8 @@ CREATE TABLE IF NOT EXISTS `user5` (
   `uid` varchar(10) NOT NULL,
   `name` varchar(10) NOT NULL,
   `birth` char(10) DEFAULT '0000-00-00',
-  `gender` tinyint DEFAULT NULL,
-  `age` tinyint DEFAULT NULL,
+  `gender` tinyint(4) DEFAULT NULL,
+  `age` tinyint(4) DEFAULT NULL,
   `addr` varchar(10) DEFAULT NULL,
   `hp` char(13) DEFAULT NULL,
   PRIMARY KEY (`uid`)
@@ -1452,8 +1453,8 @@ CREATE TABLE IF NOT EXISTS `user6` (
   `uid` varchar(10) NOT NULL,
   `name` varchar(10) NOT NULL,
   `birth` char(10) DEFAULT '0000-00-00',
-  `gender` tinyint DEFAULT NULL,
-  `age` tinyint DEFAULT NULL,
+  `gender` tinyint(4) DEFAULT NULL,
+  `age` tinyint(4) DEFAULT NULL,
   `addr` varchar(10) DEFAULT NULL,
   `hp` char(13) DEFAULT NULL,
   PRIMARY KEY (`uid`)
