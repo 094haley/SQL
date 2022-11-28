@@ -68,7 +68,17 @@ ALTER TABLE `board_user` ADD COLUMN `sessLimitDate` DATETIME;
 ALTER TABLE `board_user` DROP COLUMN `sessId`;
 ALTER TABLE `board_user` DROP COLUMN `sessLimitDate`;
 
+
 UPDATE `board_user` SET `sessid`=?, `sessLimitDate` = DATE_ADD(NOW(), INTERVAL 3 DAY) WHERE `uid`=?;
 
-SELECT * FROM `board_user` WHERE `sessId`=? AND `sessLimitDate` > NOW();  
+SELECT * FROM `board_user` WHERE `sessId`=? AND `sessLimitDate` > NOW();
 
+  
+SELECT a.*, b.nick FROM `board_article` AS a
+JOIN `board_user` AS b ON a.uid = b.uid
+WHERE `parent`=0 AND (`title` LIKE '%당근%' OR `nick` LIKE '%당근%')
+ORDER BY `no` DESC LIMIT 0, 10;
+
+SELECT COUNT(`no`) FROM `board_article` AS a
+JOIN `board_user` AS b ON a.uid = b.uid
+WHERE `parent` = 0 AND (`title` LIKE '%당근%' OR `nick` LIKE '%당근%');
