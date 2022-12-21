@@ -108,3 +108,45 @@ INSERT INTO `km_product` (`prodCate1`, `prodCate2`, `prodName`, `descript`, `com
 SELECT *, FLOOR(`price` * (1 - `discount` / 100)) AS `disPrice`,
 DATE_ADD(NOW(), INTERVAL 3 DAY) AS `deliveryDate`
 FROM `km_product` WHERE `prodNo` = 1000375;
+
+
+UPDATE `km_product` SET `hit` = `hit`+1 WHERE `prodNo`=1000517;
+
+
+SELECT * FROM `km_product` WHERE `prodNo`= 1000323;
+
+
+INSERT INTO `km_product_cart` (`uid`, `prodNo`, `count`, `price`, `discount`, `point`, `delivery`, `total`, `rdate`) VALUES ('carrot112', 1000323, 2, 45000, 25, 450, 0, 90000, NOW());  
+
+
+SELECT *, FLOOR(`price` * (1 - `discount` / 100)) AS `disPrice` FROM `km_product` WHERE `prodNo`= 1000032;
+
+
+
+INSERT INTO `km_cs_notice_board` (`cate`, `title`, `content`, `uid`, `regip`, `rdate`) VALUES('1', '제목ㄴㄹㄴ', '내용임', 'carrot112', 'dfsfsfsdf', NOW());
+
+
+
+SELECT COUNT(`no`) FROM `km_cs_notice_board`;
+SELECT COUNT(`no`) FROM `km_cs_notice_board` WHERE `cate`=2;
+
+
+SELECT * FROM `km_cs_notice_board` WHERE `cate`=1; 
+SELECT COUNT(`no`) FROM `km_cs_notice_board` WHERE `cate`=1;
+
+INSERT INTO `km_cs_notice_board` (`uid`, `cate`, `cateName`, `title`, `content`, `regip`, `rdate`)
+SELECT (`uid`, `cate`, `cateName`, `title`, `content`, `regip`, `rdate`) FROM `km_cs_notice_board`;
+
+
+INSERT INTO `km_cs_notice_board` (`uid`, `cate`, `cateName`, `title`, `content`, `regip`, `rdate`)
+VALUES ('carrot112', 1, '고객서비스', '고객서비스', '테스트', '0:0:0:0:0:0:0:1', '2022-12-21 06:20:25');
+INSERT INTO `km_cs_notice_board` (`uid`, `cate`, `cateName`, `title`, `content`, `regip`, `rdate`)
+VALUES ('carrot112', 2, '안전거래', '안전거래', '테스트', '0:0:0:0:0:0:0:1', '2022-12-21 06:20:25');
+INSERT INTO `km_cs_notice_board` (`uid`, `cate`, `cateName`, `title`, `content`, `regip`, `rdate`)
+VALUES ('carrot112', 3, '위해상품', '위해상품', '테스트', '0:0:0:0:0:0:0:1', '2022-12-21 06:20:25');
+INSERT INTO `km_cs_notice_board` (`uid`, `cate`, `cateName`, `title`, `content`, `regip`, `rdate`)
+VALUES ('carrot112', 4, '이벤트상품', '이벤트상품', '테스트', '0:0:0:0:0:0:0:1', '2022-12-21 06:20:25');
+
+ALTER TABLE `km_cs_notice_board` ADD COLUMN `cateName` VARCHAR(20) AFTER `cate`;
+
+ALTER TABLE `km_cs_notice_board` ADD COLUMN `hit` INT DEFAULT 0  AFTER `uid`;
