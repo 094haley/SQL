@@ -76,9 +76,32 @@ JOIN `lemo_product_room` AS b
 ON a.acc_id = b.acc_id AND ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 5000
 
 
-SELECT a.*, SUM(b.room_stock) AS 'sum', MIN(b.room_price) AS 'price'   FROM `lemo_product_accommodation` AS a
+SELECT COUNT(a.acc_id) FROM `lemo_product_accommodation` AS a
 JOIN `lemo_product_room` AS b
-ON a.`acc_id` = b.`acc_id` AND ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 50000
+ON a.`acc_id` = b.`acc_id` AND ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 5000
 GROUP BY a.`acc_id`
 
 ORDER BY ST_DISTANCE_SPHERE(a.`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) asc
+
+
+
+SELECT COUNT(DISTINCT a.acc_id) FROM `lemo_product_accommodation` AS a
+JOIN (SELECT * FROM `lemo_product_room` WHERE room_price BETWEEN 0 AND 50000) AS b
+ON a.`acc_id` = b.`acc_id`
+WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 5000
+
+
+GROUP BY a.`acc_id`
+HAVING  (MIN(b.room_price) BETWEEN 0 AND 50000)
+
+
+SELECT * FROM `lemo_product_room` WHERE MIN(room_price) BETWEEN 0 AND 50000
+
+
+
+
+
+
+
+
+
