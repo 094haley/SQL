@@ -48,17 +48,37 @@ WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.
 # 숙소 join
 SELECT a.*, SUM(b.room_stock) AS 'sum', MIN(b.room_price) AS 'price'   FROM `lemo_product_accommodation` AS a
 JOIN `lemo_product_room` AS b 
-WHERE a.acc_id = b.acc_id AND ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 3000
-GROUP BY a.acc_id;
+ON a.acc_id = b.acc_id AND ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 5000
+GROUP BY a.acc_id
+LIMIT 0, 10;
+;
 
 
-SELECT * FROM `lemo_product_accommodation` AS a
-JOIN `lemo_product_room` AS b 
-WHERE a.acc_id = b.acc_id AND ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 1000
-GROUP BY a.acc_id;
+
 
 
 
 # 랜덤 쿼리 
 UPDATE `lemo_product_room` set `room_stock`= CEILING(RAND()*3)+2;
 UPDATE `lemo_product_room` set `room_maxNum`= CEILING(RAND()*3)+1;
+UPDATE `lemo_product_accommodation` set `acc_review`= CEILING(RAND()*500)+500;
+UPDATE `lemo_product_accommodation` set `acc_rate`= CEILING(RAND()*6)+4;
+
+# 기본 목록 검색
+SELECT * FROM `lemo_product_accommodation` AS a
+JOIN `lemo_product_room` AS b 
+on a.acc_id = b.acc_id WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 1000
+GROUP BY a.acc_id;
+
+# total 
+SELECT COUNT(DISTINCT a.acc_id) FROM `lemo_product_accommodation` AS a
+JOIN `lemo_product_room` AS b 
+ON a.acc_id = b.acc_id AND ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 5000
+
+
+SELECT a.*, SUM(b.room_stock) AS 'sum', MIN(b.room_price) AS 'price'   FROM `lemo_product_accommodation` AS a
+JOIN `lemo_product_room` AS b
+ON a.`acc_id` = b.`acc_id` AND ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 50000
+GROUP BY a.`acc_id`
+
+ORDER BY ST_DISTANCE_SPHERE(a.`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) asc
