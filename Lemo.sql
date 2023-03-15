@@ -124,7 +124,7 @@ ON a.`acc_id` = b.`acc_id`
 WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 1000
 GROUP BY a.`acc_id`
 
-INSERT INTO `lemo_product_reservation` VALUES('2303140000000001', '1004266','')
+
 
 INSERT INTO `lemo_product_reserved_room` (`res_no`, `room`)
 
@@ -138,3 +138,45 @@ WHERE MBRContains(ST_GEOMFROMTEXT('LineString(128.95920227695035 35.000006017035
 GROUP BY a.`acc_id`
 
 MBRContains(ST_GeomFromText('LineString(129.03060372697024 35.13580474054441, 129.11081371521917 35.16456822146159)'), `xy`)
+
+
+INSERT INTO `lemo_product_reservation` 
+VALUES('2303140000000003', 1004299, 1015514, '1000hyeok0819@naver.com',50000,5000,'김당근','010-1234-1111',1,
+NOW(),'2023-03-20','2023-03-27',1,'test')
+
+SELECT a.acc_id, d.room_id
+FROM `lemo_product_accommodation` AS a
+JOIN (SELECT b.room_stock FROM `lemo_product_room` AS b
+		JOIN `lemo_product_reservation` AS c
+		ON b.room_id = c.room_id) AS d
+ON a.`acc_id` = d.`acc_id`
+WHERE MBRContains(ST_GEOMFROMTEXT('LineString(128.95920227695035 35.00000601703598, 129.25054302968204 35.398653663767334)'), `acc_xy`)
+GROUP BY a.`acc_id`
+
+14,15,16
+SELECT COUNT(b.`room_id`) FROM `lemo_product_room` AS b
+JOIN `lemo_product_reservation` AS c
+ON b.room_id = c.room_id 
+WHERE `res_checkIn` NOT  BETWEEN ('2023-03-16' AND '2023-03-20')
+GROUP BY b.room_id; 
+
+
+/* 룸 아이디별 예약 갯수 */
+SELECT b.room_id, COUNT(b.`room_id`) AS rcount 
+FROM `lemo_product_room` AS b JOIN `lemo_product_reservation` AS c
+ON b.room_id = c.room_id 
+WHERE 
+(`res_checkIn` BETWEEN '2023-03-20' AND DATE_SUB('2003-03-27', INTERVAL 1 DAY))
+Or (DATE_SUB(`res_checkOut`, INTERVAL 1 DAY) BETWEEN '2023-03-20' AND '2023-03-27')
+GROUP BY b.room_id;
+
+
+SELECT * FROM `lemo_product_room` AS d 
+OUTER JOIN 
+(SELECT b.room_id, COUNT(b.`room_id`) AS rcount 
+FROM `lemo_product_room` AS b JOIN `lemo_product_reservation` AS c
+ON b.room_id = c.room_id 
+WHERE 
+(`res_checkIn` BETWEEN '2023-03-20' AND DATE_SUB('2003-03-27', INTERVAL 1 DAY))
+Or (DATE_SUB(`res_checkOut`, INTERVAL 1 DAY) BETWEEN '2023-03-20' AND '2023-03-27')
+GROUP BY b.room_id) AS e;
