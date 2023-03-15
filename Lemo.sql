@@ -89,16 +89,52 @@ WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.
 
 
 GROUP BY a.`acc_id`
-HAVING  (MIN(b.room_price) BETWEEN 0 AND 50000)
+HAVING  (MIN(b.room_price) BETWEEN 0 AND 50000
 
 
 SELECT * FROM `lemo_product_room` WHERE MIN(room_price) BETWEEN 0 AND 50000
 
 
 
+SELECT *
+FROM `lemo_product_accommodation` AS a
+JOIN `lemo_product_room` AS b
+ON a.`acc_id` = b.`acc_id`
+WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 1000
+GROUP BY a.`acc_id`
 
 
 
+HAVING  (MIN(b.room_price) BETWEEN 0 AND 50000)
 
 
 
+/* 남은 객실 갯수 총합 */
+SELECT COUNT(b.room_stock)
+FROM `lemo_product_accommodation` AS a
+JOIN `lemo_product_room` AS b
+ON a.`acc_id` = b.`acc_id`
+WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 1000
+GROUP BY a.`acc_id`
+
+SELECT *
+FROM `lemo_product_accommodation` AS a
+JOIN `lemo_product_room` AS b
+ON a.`acc_id` = b.`acc_id`
+WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 1000
+GROUP BY a.`acc_id`
+
+INSERT INTO `lemo_product_reservation` VALUES('2303140000000001', '1004266','')
+
+INSERT INTO `lemo_product_reserved_room` (`res_no`, `room`)
+
+
+
+SELECT *
+FROM `lemo_product_accommodation` AS a
+JOIN `lemo_product_room` AS b
+ON a.`acc_id` = b.`acc_id`
+WHERE MBRContains(ST_GEOMFROMTEXT('LineString(128.95920227695035 35.00000601703598, 129.25054302968204 35.398653663767334)'), `acc_xy`)
+GROUP BY a.`acc_id`
+
+MBRContains(ST_GeomFromText('LineString(129.03060372697024 35.13580474054441, 129.11081371521917 35.16456822146159)'), `xy`)
