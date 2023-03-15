@@ -55,9 +55,6 @@ LIMIT 0, 10;
 
 
 
-
-
-
 # 랜덤 쿼리 
 UPDATE `lemo_product_room` set `room_stock`= CEILING(RAND()*3)+2;
 UPDATE `lemo_product_room` set `room_maxNum`= CEILING(RAND()*3)+1;
