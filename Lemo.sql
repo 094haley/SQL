@@ -171,7 +171,7 @@ Or (DATE_SUB(`res_checkOut`, INTERVAL 1 DAY) BETWEEN '2023-03-20' AND '2023-03-2
 GROUP BY b.room_id;
 
 
-SELECT * FROM `lemo_product_room` AS d 
+SELECT * FROM `lemo_product_room` AS a
 OUTER JOIN 
 (SELECT b.room_id, COUNT(b.`room_id`) AS rcount 
 FROM `lemo_product_room` AS b JOIN `lemo_product_reservation` AS c
@@ -180,3 +180,96 @@ WHERE
 (`res_checkIn` BETWEEN '2023-03-20' AND DATE_SUB('2003-03-27', INTERVAL 1 DAY))
 Or (DATE_SUB(`res_checkOut`, INTERVAL 1 DAY) BETWEEN '2023-03-20' AND '2023-03-27')
 GROUP BY b.room_id) AS e;
+
+
+
+SELECT c.acc_id, b.room_id, COUNT(b.`room_id`) AS rcount
+FROM `lemo_product_room` AS b JOIN `lemo_product_reservation` AS c
+ON b.room_id = c.room_id
+WHERE
+(`res_checkIn` BETWEEN '2023-03-20' AND DATE_SUB('2003-03-27', INTERVAL 1 DAY))
+Or (DATE_SUB(`res_checkOut`, INTERVAL 1 DAY) BETWEEN '2023-03-20' AND '2023-03-27')
+GROUP BY c.acc_id, b.room_id;
+
+
+SELECT a.*, SUM(b.room_stock) AS 'roomstock', MIN(b.room_price) AS 'price'   FROM `lemo_product_accommodation` AS a
+JOIN `lemo_product_room` AS b
+ON a.`acc_id` = b.`acc_id`
+WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 1000
+GROUP BY a.`acc_id`
+
+
+
+
+
+
+/* 테스트  */
+
+SELECT *, SUM(b.room_stock) AS 'roomstock', MIN(b.room_price) AS 'price'
+FROM `lemo_product_accommodation` AS a
+LEFT JOIN (
+
+SELECT c.acc_id,c.room_id, c.room_stock, c.room_maxNum, c.room_price, COUNT(c.`room_id`) AS rcount
+FROM `lemo_product_room` AS c 
+JOIN `lemo_product_reservation` AS d ON c.room_id = d.room_id
+WHERE
+(`res_checkIn` BETWEEN '2023-03-20' AND DATE_SUB('2003-03-27', INTERVAL 1 DAY))
+Or (DATE_SUB(`res_checkOut`, INTERVAL 1 DAY) BETWEEN '2023-03-20' AND '2023-03-27')
+
+) AS b
+
+
+ON a.`acc_id` = b.`acc_id`
+WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 1000
+GROUP BY a.`acc_id`
+
+
+/* 테스트  */
+SELECT *, SUM(b.room_stock) AS 'roomstock', MIN(b.room_price) AS 'price'
+FROM `lemo_product_accommodation` AS a
+LEFT JOIN (
+
+SELECT c.acc_id,c.room_id, c.room_stock, c.room_maxNum, c.room_price, COUNT(c.`room_id`) AS rcount
+FROM `lemo_product_room` AS c 
+JOIN `lemo_product_reservation` AS d ON c.room_id = d.room_id
+WHERE
+(`res_checkIn` BETWEEN '2023-03-20' AND DATE_SUB('2003-03-27', INTERVAL 1 DAY))
+Or (DATE_SUB(`res_checkOut`, INTERVAL 1 DAY) BETWEEN '2023-03-20' AND '2023-03-27')
+
+) AS b
+
+
+ON a.`acc_id` = b.`acc_id`
+WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 1000
+GROUP BY a.`acc_id`
+
+
+
+
+
+
+/* 테스트  */
+
+SELECT * FROM 
+(
+SELECT a.*, SUM(b.room_stock) AS 'roomstock', MIN(b.room_price) AS 'price'   FROM `lemo_product_accommodation` AS a
+JOIN `lemo_product_room` AS b
+ON a.`acc_id` = b.`acc_id`
+WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 1000
+GROUP BY a.`acc_id`
+) AS e
+
+JOIN 
+(
+SELECT c.acc_id, (c.`room_id`) AS rcount
+FROM `lemo_product_room` AS c JOIN `lemo_product_reservation` AS d
+ON c.room_id = d.room_id
+
+GROUP BY c.acc_id, d.room_id
+) AS f
+
+ON e.acc_id = f.acc_id
+
+GROUP BY e.acc_id
+
+
