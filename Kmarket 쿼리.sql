@@ -131,7 +131,7 @@ SELECT COUNT(`no`) FROM `km_cs_notice_board`;
 SELECT COUNT(`no`) FROM `km_cs_notice_board` WHERE `cate`=2;
 
 
-SELECT * FROM `km_cs_notice_board` WHERE `cate`=1; 
+SELECT * FROM `km_cs_notice_board` WHERE `cate`=3; 
 SELECT COUNT(`no`) FROM `km_cs_notice_board` WHERE `cate`=1;
 
 INSERT INTO `km_cs_notice_board` (`uid`, `cate`, `cateName`, `title`, `content`, `regip`, `rdate`)
@@ -150,3 +150,52 @@ VALUES ('carrot112', 4, '이벤트상품', '이벤트상품', '테스트', '0:0:
 ALTER TABLE `km_cs_notice_board` ADD COLUMN `cateName` VARCHAR(20) AFTER `cate`;
 
 ALTER TABLE `km_cs_notice_board` ADD COLUMN `hit` INT DEFAULT 0  AFTER `uid`;
+
+SELECT * FROM `km_cs_notice_board` WHERE `cate`=3;
+
+DELETE FROM `km_cs_notice_board` WHERE `no`=105 OR `no`=102;
+
+SELECT `title`, `rdate` FROM `km_cs_notice_board` ORDER BY `no` DESC LIMIT 5;
+
+SELECT a.*, b.c1Name, b.c2Name FROM `km_cs_qna_board` AS a 
+JOIN `km_cs_qna_cate` AS b 
+ON a.cate1 = b.cate1 AND a.cate2 = b.cate2 
+WHERE `parent`= 0 ORDER BY `no` DESC LIMIT 0,10; 
+
+
+
+
+
+SELECT COUNT(`no`) FROM `km_cs_qna_board` WHERE `parent`=0;
+SELECT COUNT(`no`) FROM `km_cs_qna_board` WHERE `parent`=0 AND `cate1`=4;
+SELECT COUNT(`no`) FROM `km_cs_qna_board` WHERE `parent`=0 AND `cate1`=1 AND `cate2`=3;
+
+
+SELECT * FROM `km_cs_qna_board` WHERE `parent`=0 ORDER BY `no` DESC LIMIT 0,10;
+
+SELECT a.*, b.c1Name, b.c2Name FROM `km_cs_qna_board` AS a 
+JOIN `km_cs_qna_cate` AS b 
+ON a.cate1 = b.cate1 AND a.cate2 = b.cate2 
+WHERE `parent`= 0 AND a.`cate1`=1 AND a.`cate2`=3 ORDER BY `no` DESC LIMIT 0,10; 
+
+INSERT INTO `km_cs_qna_board` SET
+`parent`=82,
+`cate1`=1,
+`cate2`=3,
+`content`='ddddddd',
+`uid`='sdfdsfds',
+`regip`=456456,
+`rdate`=NOW();
+
+UPDATE `km_cs_qna_board` SET `comment` = `comment` + 1 WHERE `no`=82;
+
+
+SELECT * FROM `km_product` WHERE `prodCate1`=18 AND `prodCate2`=14
+
+INSERT INTO `km_product` (`prodCate1`, `prodCate2`, `prodName`, `descript`, `company`, `seller`, `price`, `discount`, `point`, `stock`, `sold`, `delivery`, `hit`, `score`, `review`, `thumb1`, `thumb2`, `thumb3`, `detail`, `status`, `duty`, `receipt`, `bizType`, `origin`, `ip`, `rdate`, `etc1`, `etc2`, `etc3`, `etc4`, `etc5`) VALUES (1000022, 10, 10, '머스트비外 겨울 최대 할인 혜택 여성 아우터/이너/팬츠外 최대 89% 할인', '머스트비 여성아우터', '이끌림컴퍼니', 'kimwoo232800', 18400, 0, 184, 500, 35, 0, 50, 5, 37, 'db012cd1-f3f9-4bb1-a559-2324fc48e85d.jpg', '03479636-2aa7-4d15-84e1-82c06e670d3e.jpg', 'f93523c4-b975-4a65-906e-88d572af1733.jpg', 'cdc7392f-92fe-495f-b036-0a615483f094.jpg', '새상품', '과세상품', '발행가능', '사업자 판매자', '국내산', '183.103.92.87', '2022-12-14 12:44:38', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `km_product` (`prodCate1`, `prodCate2`, `prodName`, `descript`, `company`, `seller`, `price`, `discount`, `point`, `stock`, `sold`, `delivery`, `hit`, `score`, `review`, `thumb1`, `thumb2`, `thumb3`, `detail`, `status`, `duty`, `receipt`, `bizType`, `origin`, `ip`, `rdate`, `etc1`, `etc2`, `etc3`, `etc4`, `etc5`) VALUES (1000023, 10, 10, '22% 플라스틱아일랜드 신상F/W 점퍼 코트 外', '플라스틱 아일랜드 점퍼 코트', '메트로시티공식', 'kimwoo232800', 78880, 0, 788, 500, 76, 0, 95, 2, 95, 'b34c1f2f-ddaa-47ec-81c6-a432175371e1.jpg', '9de7030a-89db-471e-9a43-97f161738237.jpg', '2233385c-3784-4ac4-9982-8a0d3cee81ac.jpg', '56f099af-3186-49db-a65f-f36da065c189.jpg', '새상품', '과세상품', '발행가능', '사업자 판매자', '국내산', '183.103.92.87', '2022-12-14 12:45:33', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `km_product` (`prodCate1`, `prodCate2`, `prodName`, `descript`, `company`, `seller`, `price`, `discount`, `point`, `stock`, `sold`, `delivery`, `hit`, `score`, `review`, `thumb1`, `thumb2`, `thumb3`, `detail`, `status`, `duty`, `receipt`, `bizType`, `origin`, `ip`, `rdate`, `etc1`, `etc2`, `etc3`, `etc4`, `etc5`) VALUES (1000024, 10, 10, '(10%+5%)이사베이/씨 다가오는 추위 입기 좋은 아우터/가디건/니트 外 특가', '입기 좋은 아우터', '플라스틱아일랜드', 'kimwoo232800', 18400, 0, 184, 500, 75, 0, 21, 3, 62, '6a4e91f2-d7bf-4d25-af88-545c708c3613.jpg', '6b3b64c6-bcb1-4eb2-bfeb-d246451e8b6c.jpg', 'e6158541-5503-464b-9fa8-d293ea4417a2.jpg', '63fd91d1-6bbe-46bd-a766-baed089a629a.jpg', '새상품', '과세상품', '발행가능', '사업자 판매자', '국내산', '183.103.92.87', '2022-12-14 12:46:48', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `km_product` (`prodCate1`, `prodCate2`, `prodName`, `descript`, `company`, `seller`, `price`, `discount`, `point`, `stock`, `sold`, `delivery`, `hit`, `score`, `review`, `thumb1`, `thumb2`, `thumb3`, `detail`, `status`, `duty`, `receipt`, `bizType`, `origin`, `ip`, `rdate`, `etc1`, `etc2`, `etc3`, `etc4`, `etc5`) VALUES (1000025, 10, 10, '미센스 겨울 BEST ITEM 특가전 코트/점퍼/티셔츠외 + 10%쿠폰', '미센스 코트', '(주)신원', 'kimwoo232800', 39000, 0, 390, 500, 48, 0, 16, 5, 26, '9ae192b1-e07a-4068-8b31-38afb89986e2.jpg', 'e6f9d20d-ddf2-42e6-ad0c-49266730f627.jpg', '6a0f1d40-54e4-4f24-aaed-2d83b877507c.jpg', '887477db-1818-44f1-9f85-a69b2912cbf1.jpg', '새상품', '과세상품', '발행가능', '사업자 판매자', '국내산', '183.103.92.87', '2022-12-14 12:47:43', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `km_product` (`prodCate1`, `prodCate2`, `prodName`, `descript`, `company`, `seller`, `price`, `discount`, `point`, `stock`, `sold`, `delivery`, `hit`, `score`, `review`, `thumb1`, `thumb2`, `thumb3`, `detail`, `status`, `duty`, `receipt`, `bizType`, `origin`, `ip`, `rdate`, `etc1`, `etc2`, `etc3`, `etc4`, `etc5`) VALUES (1000026, 10, 10, '맨투맨 M213CT2700I', '매트로시티 맨투맨', '미센스/반에이크', 'kimwoo232800', 120000, 0, 1200, 500, 14, 0, 21, 2, 41, 'd13262fd-1f9c-412e-86f1-ed717b443701.jpg', 'f7e3f259-82aa-4206-ac96-57a9f15e8b55.jpg', '26f402eb-6ad0-42d7-a538-6207ab60350d.jpg', '1473977e-8ef0-4e95-955a-0d09cf4341aa.jpg', '새상품', '과세상품', '발행가능', '사업자 판매자', '국내산', '183.103.92.87', '2022-12-14 12:48:28', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `km_product` (`prodCate1`, `prodCate2`, `prodName`, `descript`, `company`, `seller`, `price`, `discount`, `point`, `stock`, `sold`, `delivery`, `hit`, `score`, `review`, `thumb1`, `thumb2`, `thumb3`, `detail`, `status`, `duty`, `receipt`, `bizType`, `origin`, `ip`, `rdate`, `etc1`, `etc2`, `etc3`, `etc4`, `etc5`) VALUES (1000027, 10, 10, '블라우스 M211CJ0200F', '메트로시티 블라우스', '미센스/반에이크', 'kimwoo232800', 78880, 0, 788, 500, 24, 0, 59, 2, 27, '415512b8-ad31-49e3-b55a-43f1cd668508.jpg', 'b6a3a2d0-8a8b-4eab-9e73-f6e66ed97394.jpg', '91d24b14-713e-4b79-b70b-927056784d38.jpg', 'b9df0711-9474-4490-9592-994e7d303e30.jpg', '새상품', '과세상품', '발행가능', '사업자 판매자', '국내산', '183.103.92.87', '2022-12-14 12:49:21', NULL, NULL, NULL, NULL, NULL);
+
