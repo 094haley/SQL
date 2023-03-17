@@ -274,3 +274,5 @@ ON e.acc_id = f.acc_id
 
 GROUP BY e.acc_id
 
+SELECT * FROM `lemo_product_accommodation` AS a
+JOIN `lemo_product_room` AS b ON a.acc_id = b.acc_id
