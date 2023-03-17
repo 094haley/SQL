@@ -67,14 +67,15 @@ LEFT JOIN (
     SELECT a.acc_id 'acc_id', r.room_id 'room_id', (r.room_stock - COUNT(rero.rero_id)) 'empty_room_stock' FROM `lemo_product_accommodation` a
     JOIN    `lemo_product_room` r ON a.acc_id = r.acc_id
     JOIN    `lemo_product_reserved_room` rero ON r.room_id = rero.room_id AND r.acc_id = rero.acc_id
-    WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 1000 AND
-                                            (rero.rero_checkOut_date > '2023-03-05' AND rero.rero_checkIn_date < '2023-03-06')
+    WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(128.088191820627000 35.190927571862600)')) <= 1000 AND
+                                            (rero.rero_checkOut_date > null AND rero.rero_checkIn_date < null)
     GROUP BY a.`acc_id`, r.room_id
     ) b
 ON a.acc_id = b.acc_id AND r.room_id = b.room_id
-WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(129.09738589504354 35.1388730416101)')) <= 5000
+WHERE ST_Distance_Sphere(`acc_xy`, ST_GEOMFROMTEXT('POINT(128.088191820627000 35.190927571862600)')) <= 5000
 ORDER BY a.acc_id) a
-WHERE (a.empty_room_stock != 0 OR (a.sum_room_stock = 0 AND a.top = 1)) AND a.room_maxNum > 3
+WHERE (a.empty_room_stock != 0 OR (a.sum_room_stock = 0 AND a.top = 1))
 ) a
-WHERE a.order = 1 AND room_price < 35000
+WHERE a.order = 1
 
+a
